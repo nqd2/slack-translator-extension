@@ -1,0 +1,180 @@
+/* Translate for Slack - Content Styles */
+
+/* Action Bar Container */
+.___sgt-action-container {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  user-select: none;
+}
+
+/* Trigger Button */
+.___sgt-translate-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sk_highlight_accent, #1264a3);
+  font-size: 12px;
+  line-height: 16px;
+  font-family: inherit;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.___sgt-translate-trigger:hover {
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.06);
+  text-decoration: none;
+}
+
+.___sgt-translate-trigger .___sgt-chevron {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.___sgt-translate-trigger.___sgt-active .___sgt-chevron {
+  transform: rotate(180deg);
+}
+
+/* Loading spinner animation */
+.___sgt-translate-trigger.___sgt-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.___sgt-translate-trigger.___sgt-loading .___sgt-icon {
+  animation: ___sgtSpin 1s linear infinite;
+}
+
+@keyframes ___sgtSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Accordion Translation Box */
+.___sgt-translation-box {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.035);
+  border: 1px solid rgba(var(--sk_primary_foreground, 29, 28, 29), 0.1);
+  border-left: 3.5px solid var(--sk_highlight_accent, #1264a3);
+  padding: 8px 12px;
+  box-sizing: border-box;
+  animation: ___sgtFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ___sgtFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header inside Translation Box */
+.___sgt-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.65);
+}
+
+.___sgt-box-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.___sgt-provider-badge {
+  background: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.08);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.___sgt-lang-pair {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* Controls (Copy & Close) */
+.___sgt-box-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.___sgt-btn-copy,
+.___sgt-btn-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.___sgt-btn-copy:hover,
+.___sgt-btn-close:hover {
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.08);
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.95);
+}
+
+.___sgt-btn-copy.___sgt-copied {
+  color: #2eb67d !important;
+  font-weight: 600;
+}
+
+.___sgt-btn-close {
+  font-size: 14px;
+  line-height: 12px;
+  padding: 2px 5px;
+}
+
+/* Body (Translated Text) */
+.___sgt-box-body {
+  margin-top: 4px;
+}
+
+.___sgt-translated-text {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.92);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Footer & Attribution */
+.___sgt-box-footer {
+  margin-top: 6px;
+  text-align: right;
+}
+
+.___sgt-attribution-link {
+  font-size: 10px;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.45);
+  text-decoration: none;
+}
+
+.___sgt-attribution-link:hover {
+  text-decoration: underline;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.75);
+}

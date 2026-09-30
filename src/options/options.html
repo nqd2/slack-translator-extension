@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Slack Translator</title>
+  <link rel="shortcut icon" href="./icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="./icons/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./options.css">
+</head>
+
+<body>
+  <header>
+    <img src="./icons/48.png" alt="Slack Translator Logo">
+    <h1>Settings - Slack Translator</h1>
+  </header>
+
+  <main class="content">
+    <div class="section">
+      <h2 class="header">Translate Settings</h2>
+      <div class="card">
+        <div class="card-row">
+          <div class="flex">Translate From</div>
+          <select name="translate-from" id="translate-from-dropdown">
+            <option value="auto" id="from-auto" selected>Auto Detect</option>
+          </select>
+        </div>
+        <div class="card-row">
+          <div class="flex">Translate To</div>
+          <select name="translate-to" id="translate-to-dropdown"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="header">Advanced Settings</h2>
+      <div class="card">
+        <div class="card-row">
+          <div class="flex">(Optional) Translate Button Label</div>
+          <input id="translate-label" type="text" placeholder="View Translation">
+        </div>
+        <div class="card-row">
+          <div class="flex">
+            <span>(Optional) Only Show Translate Button If Regex Is Matched</span>
+            <span class="learn-more" id="show-regex-card"><br>Learn more</span>
+          </div>
+          <input id="translate-regex" type="text" placeholder="/pattern/flags">
+        </div>
+        <div class="regex-card" hidden>
+          <div class="title"><b>Examples of Regex:</b></div>
+          <div><code>/([\u0e00-\u0e7f])/</code> : Show translate button if Thai character is found</div>
+          <div><code>/([\u1100-\u11ff])/</code> : Show translate button if Korean character is found</div>
+          <div><code>/([\u0b80-\u0bfe])/</code> : Show translate button if Tamil character is found</div>
+          <div><code>/([\u4e00-\u9fbf\u3040-\u309f\u30a0-\u30ff])/</code> : Show translate button if Japanese character
+            is found</div>
+          <div class="more">More examples: <a href="https://apps.timwhitlock.info/js/regex" target="_blank"
+              rel="noopener noreferrer">apps.timwhitlock.info/js/regex</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="header">Reset Settings</h2>
+      <div class="card">
+        <div class="card-row">
+          <div class="flex">Restore settings to their original defaults</div>
+          <button type="button" id="translate-reset">Reset</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" hidden>Settings saved</div>
+
+  <script src="./options.js"></script>
+</body>
+
+</html>
