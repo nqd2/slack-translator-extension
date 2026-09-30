@@ -59,6 +59,9 @@ const contexts = await Promise.all([
     bundle: true,
     format: 'esm',
     target: 'es2022',
+    banner: {
+      js: 'if (typeof window === "undefined" && typeof globalThis !== "undefined") { globalThis.window = globalThis; }'
+    },
     plugins: [createDevPlugin('background')]
   }),
   esbuild.context({

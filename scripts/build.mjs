@@ -62,6 +62,9 @@ export async function bundleCode() {
       bundle: true,
       format: 'esm',
       target: 'es2022',
+      banner: {
+        js: 'if (typeof window === "undefined" && typeof globalThis !== "undefined") { globalThis.window = globalThis; }'
+      },
       minify: false,
       sourcemap: false
     }),
