@@ -18,7 +18,7 @@ export async function translateText({ text, fromLang = 'auto', toLang = 'en' }) 
     throw new Error('Empty text provided for translation');
   }
 
-  const queryParams = new URLSearchParams({
+  const body = new URLSearchParams({
     client: 'gtx',
     sl: fromLang,
     tl: toLang,
@@ -26,9 +26,14 @@ export async function translateText({ text, fromLang = 'auto', toLang = 'en' }) 
     q: text
   });
 
-  const url = `${BASE_URL}?${queryParams.toString()}`;
+  const response = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: body.toString()
+  });
 
-  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Google Translate API error: HTTP ${response.status}`);
   }

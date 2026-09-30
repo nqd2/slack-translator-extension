@@ -213,7 +213,7 @@ export class AccordionWidget {
         </div>
       </div>
       <div class="___sgt-box-body">
-        <div class="___sgt-translated-text">${this.escape(this.translatedText)}</div>
+        <div class="___sgt-translated-text p-rich_text_block">${this.sanitize(this.translatedText)}</div>
       </div>
       <div class="___sgt-box-footer">
         <a href="https://translate.google.com/" target="_blank" rel="noopener noreferrer" class="___sgt-attribution-link">
@@ -241,7 +241,9 @@ export class AccordionWidget {
   async handleCopy(e, copyBtn) {
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(this.translatedText);
+      const textElement = this.translationBox.querySelector('.___sgt-translated-text');
+      const textToCopy = textElement ? textElement.innerText : this.translatedText;
+      await navigator.clipboard.writeText(textToCopy);
       copyBtn.classList.add('___sgt-copied');
       copyBtn.innerHTML = `${ICONS.check} <span class="___sgt-copy-text">Copied!</span>`;
       setTimeout(() => {
@@ -250,6 +252,35 @@ export class AccordionWidget {
       }, 2000);
     } catch (err) {
       console.error('[Slack Translator] Clipboard error:', err);
+    }
+  }
+
+  sanitize(html) {
+    if (!html) return '';
+    try {
+      const template = document.createElement('template');
+      template.innerHTML = html;
+
+      // Strip dangerous HTML tags
+      const dangerousTags = ['script', 'iframe', 'object', 'embed', 'link', 'style', 'base', 'meta'];
+      dangerousTags.forEach((tag) => {
+        template.content.querySelectorAll(tag).forEach((el) => el.remove());
+      });
+
+      // Strip dangerous attributes (inline event handlers, JS links)
+      template.content.querySelectorAll('*').forEach((el) => {
+        for (const attr of Array.from(el.attributes)) {
+          const name = attr.name.toLowerCase();
+          const val = attr.value.trim().toLowerCase();
+          if (name.startsWith('on') || val.startsWith('javascript:') || val.startsWith('data:text/html')) {
+            el.removeAttribute(attr.name);
+          }
+        }
+      });
+
+      return template.innerHTML;
+    } catch {
+      return this.escape(html);
     }
   }
 

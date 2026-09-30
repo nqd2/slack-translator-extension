@@ -46,25 +46,32 @@ export class SlackObserver {
   }
 
   processNode(node) {
+    // Never process our own translation boxes
+    if (node.closest('.___sgt-translation-box')) return;
     if (node.dataset.translateReady) return;
     node.dataset.translateReady = 'true';
 
-    const rawText = this.extractText(node);
-    if (!rawText) return;
+    const { sourceHtml, plainText } = this.extractContent(node);
+    if (!plainText && !sourceHtml) return;
 
-    if (!this.matchesRegex(rawText)) return;
+    if (!this.matchesRegex(plainText)) return;
 
-    new AccordionWidget(node, rawText, this.getSettings);
+    new AccordionWidget(node, sourceHtml, this.getSettings);
   }
 
-  extractText(node) {
+  extractContent(node) {
     const clone = node.cloneNode(true);
     const elementsToRemove = clone.querySelectorAll(
       '.c-message__edited_label, .___sgt-action-container, .___sgt-translation-box'
     );
     elementsToRemove.forEach((el) => el.remove());
 
-    return clone.innerText ? clone.innerText.trim() : '';
+    delete clone.dataset.translateReady;
+
+    const sourceHtml = clone.innerHTML ? clone.innerHTML.trim() : '';
+    const plainText = node.innerText ? node.innerText.trim() : (clone.textContent ? clone.textContent.trim() : '');
+
+    return { sourceHtml, plainText };
   }
 
   matchesRegex(text) {

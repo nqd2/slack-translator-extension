@@ -156,10 +156,83 @@
 
 .___sgt-translated-text {
   font-size: 13.5px;
-  line-height: 1.45;
+  line-height: 1.46;
   color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.92);
-  white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* Rich text paragraphs & spacing */
+.___sgt-translated-text .p-rich_text_section {
+  white-space: pre-wrap;
+  margin-bottom: 4px;
+}
+
+.___sgt-translated-text .p-rich_text_section:last-child {
+  margin-bottom: 0;
+}
+
+/* Blockquotes & quote sections */
+.___sgt-translated-text blockquote,
+.___sgt-translated-text .c-mrkdwn__quote {
+  display: block;
+  margin: 6px 0;
+  padding: 4px 8px 4px 10px;
+  border-left: 3px solid rgba(var(--sk_primary_foreground, 29, 28, 29), 0.35);
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.04);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Mentions & broadcasts (@channel, @here, @user) */
+.___sgt-translated-text .c-mrkdwn__broadcast,
+.___sgt-translated-text .c-mrkdwn__user {
+  background-color: rgba(var(--sk_highlight_accent, 18, 100, 163), 0.12);
+  color: var(--sk_highlight_accent, #1264a3);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: inherit;
+}
+
+/* Code blocks and inline code */
+.___sgt-translated-text pre,
+.___sgt-translated-text .c-mrkdwn__pre {
+  display: block;
+  margin: 6px 0;
+  padding: 6px 10px;
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.06);
+  border: 1px solid rgba(var(--sk_primary_foreground, 29, 28, 29), 0.1);
+  border-radius: 4px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.___sgt-translated-text code {
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: Monaco, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* Lists */
+.___sgt-translated-text ul,
+.___sgt-translated-text ol,
+.___sgt-translated-text .p-rich_text_list {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+.___sgt-translated-text li {
+  margin-bottom: 2px;
+}
+
+/* Links */
+.___sgt-translated-text a,
+.___sgt-translated-text .c-link {
+  color: var(--sk_highlight_accent, #1264a3);
+  text-decoration: underline;
 }
 
 /* Footer & Attribution */
