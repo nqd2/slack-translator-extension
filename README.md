@@ -2,7 +2,7 @@
 
 > Slack Translator is a Chrome Extension that can translate Slack messages directly in the Slack web app while keeping the original messages intact.
 
-## Features (v0.2.1)
+## Features (v0.2.2)
 
 - **Rich Text & Layout Preservation**: Preserves paragraph breaks, line breaks (`<br>`), blockquotes, code blocks, lists, emojis, and `@channel` / `@user` mentions with native Slack styling.
 - **Viewport Pre-fetch & Zero Latency**: Automatically pre-fetches translations in the background for visible and upcoming messages as you scroll (200px margin, inspired by Instagram's feed pre-fetching). Clicking "View Translation" opens the translation instantly in 0ms!
