@@ -3,6 +3,7 @@
  * Manages UI lifecycle, state transitions, and DOM interactions for Slack messages
  */
 import { requestTranslation } from './messaging.js';
+import { globalPrefetchQueue } from './prefetch-queue.js';
 
 const ICONS = {
   translate: `<svg class="___sgt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>`,
@@ -25,6 +26,8 @@ export class AccordionWidget {
     this.isTranslated = false;
     this.isExpanded = false;
     this.isLoading = false;
+    this.isPrefetching = false;
+    this.prefetchPromise = null;
     this.translatedText = '';
     this.detectedLang = '';
 
@@ -41,6 +44,9 @@ export class AccordionWidget {
 
     this.messageNode.appendChild(this.actionContainer);
     this.messageNode.appendChild(this.translationBox);
+
+    // Register with viewport prefetch queue
+    globalPrefetchQueue.observe(this, this.messageNode);
   }
 
   createTriggerButton() {
@@ -70,16 +76,70 @@ export class AccordionWidget {
     this.translationBox.style.display = 'none';
   }
 
+  /**
+   * Background pre-fetch without opening UI
+   * @returns {Promise<void>}
+   */
+  async prefetch() {
+    if (this.isTranslated || this.isPrefetching || this.isLoading) {
+      return this.prefetchPromise;
+    }
+
+    const settings = this.getSettings();
+    this.isPrefetching = true;
+
+    this.prefetchPromise = (async () => {
+      try {
+        const response = await requestTranslation({
+          text: this.sourceText,
+          fromLang: settings.translateFrom || 'auto',
+          toLang: settings.translateTo || 'en'
+        });
+
+        this.isTranslated = true;
+        this.translatedText = response.translatedText;
+        this.detectedLang = response.detectedLang || settings.translateFrom;
+        this.renderContent(response.targetLang || settings.translateTo);
+      } catch {
+        // Pre-fetch failures are non-blocking; on-demand click will handle retry
+      } finally {
+        this.isPrefetching = false;
+      }
+    })();
+
+    return this.prefetchPromise;
+  }
+
   async handleTriggerClick(e) {
     e.stopPropagation();
 
     if (this.isLoading) return;
 
+    // Remove from background prefetch queue if clicked early
+    globalPrefetchQueue.remove(this);
+
+    // 0ms instant toggle if already pre-fetched
     if (this.isTranslated) {
       this.toggleAccordion();
       return;
     }
 
+    // If prefetch is in flight, await it with loading indicator
+    if (this.isPrefetching && this.prefetchPromise) {
+      this.setLoading(true);
+      try {
+        await this.prefetchPromise;
+        this.setLoading(false);
+        if (this.isTranslated) {
+          this.toggleAccordion();
+          return;
+        }
+      } catch {
+        this.setLoading(false);
+      }
+    }
+
+    // Direct on-demand fetch fallback
     await this.fetchAndRender();
   }
 
@@ -101,6 +161,7 @@ export class AccordionWidget {
       this.renderContent(response.targetLang || settings.translateTo);
       this.setLoading(false);
       this.toggleAccordion();
+      globalPrefetchQueue.unobserve(this, this.messageNode);
     } catch (err) {
       this.setLoading(false);
       console.warn('[Slack Translator] Translation failed:', err);

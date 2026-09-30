@@ -93,9 +93,19 @@ function init() {
     }
   });
 
+  const translateClearCache = document.querySelector('#translate-clear-cache');
+  if (translateClearCache) {
+    translateClearCache.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: 'clearCache' }, () => {
+        showToast('Translation cache cleared');
+      });
+    });
+  }
+
   translateReset.addEventListener('click', async () => {
     await resetSettings();
-    showToast('Restored default settings');
+    chrome.runtime.sendMessage({ action: 'clearCache' });
+    showToast('Restored default settings & cleared cache');
     setTimeout(() => window.location.reload(), 400);
   });
 

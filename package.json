@@ -1,6 +1,6 @@
 {
   "name": "slack-translator",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Slack Translator is a Chrome Extension that can translate Slack messages directly in the Slack web app.",
   "type": "module",
   "scripts": {
