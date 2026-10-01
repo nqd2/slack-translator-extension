@@ -5,6 +5,8 @@
 export const DEFAULT_SETTINGS = Object.freeze({
   translateFrom: 'auto',
   translateTo: 'en',
+  outgoingTranslateFrom: 'auto',
+  outgoingTranslateTo: 'en',
   translateLabel: 'View Translation',
   translateRegex: ''
 });

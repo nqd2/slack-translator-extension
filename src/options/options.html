@@ -20,7 +20,7 @@
 
   <main class="content">
     <div class="section">
-      <h2 class="header">Translate Settings</h2>
+      <h2 class="header">Incoming Message Translation</h2>
       <div class="card">
         <div class="card-row">
           <div class="flex">Translate From</div>
@@ -31,6 +31,28 @@
         <div class="card-row">
           <div class="flex">Translate To</div>
           <select name="translate-to" id="translate-to-dropdown"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="header">Outgoing Message Translation (Before Sending)</h2>
+      <div class="card">
+        <div class="card-row">
+          <div class="flex">
+            <span>Default Source Language</span>
+            <span class="version" style="display:block; color:#80868b; font-size:12px; margin-top:2px;">Source language of your message before translating</span>
+          </div>
+          <select name="outgoing-translate-from" id="outgoing-translate-from-dropdown">
+            <option value="auto" id="outgoing-from-auto" selected>Auto Detect</option>
+          </select>
+        </div>
+        <div class="card-row">
+          <div class="flex">
+            <span>Default Target Language</span>
+            <span class="version" style="display:block; color:#80868b; font-size:12px; margin-top:2px;">Target language when clicking Translate or pressing Ctrl/Cmd+Shift+T in Slack composer</span>
+          </div>
+          <select name="outgoing-translate-to" id="outgoing-translate-to-dropdown"></select>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@
  */
 import { getSettings, onSettingsChange } from '../services/storage.js';
 import { SlackObserver } from './slack-observer.js';
+import { ComposerTranslator } from './composer-translator.js';
 
 let currentSettings = {};
 
@@ -16,11 +17,17 @@ async function bootstrap() {
   });
 
   const observer = new SlackObserver(() => currentSettings);
+  const composerTranslator = new ComposerTranslator(() => currentSettings);
+
+  const startAll = () => {
+    observer.start();
+    composerTranslator.start();
+  };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => observer.start());
+    document.addEventListener('DOMContentLoaded', startAll);
   } else {
-    observer.start();
+    startAll();
   }
 }
 

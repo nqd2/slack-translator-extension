@@ -13,24 +13,48 @@
  */
 export function requestTranslation({ text, fromLang, toLang }) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(
-      {
-        action: 'translate',
-        text,
-        fromLang,
-        toLang
-      },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          reject(new Error(chrome.runtime.lastError.message));
-          return;
-        }
-        if (!response || !response.success) {
-          reject(new Error((response && response.error) || 'Translation request failed'));
-          return;
-        }
-        resolve(response);
+    try {
+      if (!chrome.runtime?.id) {
+        reject(
+          new Error('Extension đã được cập nhật hoặc reload. Vui lòng tải lại (F5) tab Slack này.')
+        );
+        return;
       }
-    );
+
+      chrome.runtime.sendMessage(
+        {
+          action: 'translate',
+          text,
+          fromLang,
+          toLang
+        },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            const msg = chrome.runtime.lastError.message || '';
+            if (msg.includes('Extension context invalidated') || !chrome.runtime?.id) {
+              reject(
+                new Error('Extension đã được cập nhật hoặc reload. Vui lòng tải lại (F5) tab Slack này.')
+              );
+            } else {
+              reject(new Error(msg));
+            }
+            return;
+          }
+          if (!response || !response.success) {
+            reject(new Error((response && response.error) || 'Translation request failed'));
+            return;
+          }
+          resolve(response);
+        }
+      );
+    } catch (err) {
+      if (err.message && (err.message.includes('Extension context invalidated') || !chrome.runtime?.id)) {
+        reject(
+          new Error('Extension đã được cập nhật hoặc reload. Vui lòng tải lại (F5) tab Slack này.')
+        );
+      } else {
+        reject(err);
+      }
+    }
   });
 }

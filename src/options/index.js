@@ -7,6 +7,8 @@ import { getSettings, setSettings, resetSettings } from '../services/storage.js'
 
 const translateFrom = document.querySelector('#translate-from-dropdown');
 const translateTo = document.querySelector('#translate-to-dropdown');
+const outgoingTranslateFrom = document.querySelector('#outgoing-translate-from-dropdown');
+const outgoingTranslateTo = document.querySelector('#outgoing-translate-to-dropdown');
 const translateLabel = document.querySelector('#translate-label');
 const translateRegex = document.querySelector('#translate-regex');
 const translateReset = document.querySelector('#translate-reset');
@@ -27,6 +29,7 @@ function showToast(message = 'Settings saved') {
 }
 
 function generateLanguageDropdown(selectElement, prefix) {
+  if (!selectElement) return;
   const fragment = document.createDocumentFragment();
   Object.keys(LANGUAGES).forEach((langName) => {
     const option = document.createElement('option');
@@ -41,6 +44,8 @@ function generateLanguageDropdown(selectElement, prefix) {
 function init() {
   generateLanguageDropdown(translateFrom, 'from-');
   generateLanguageDropdown(translateTo, 'to-');
+  generateLanguageDropdown(outgoingTranslateFrom, 'outgoing-from-');
+  generateLanguageDropdown(outgoingTranslateTo, 'outgoing-to-');
 
   // Load existing settings
   getSettings().then((settings) => {
@@ -49,6 +54,12 @@ function init() {
 
     const toOption = document.querySelector(`#to-${settings.translateTo}`);
     if (toOption) toOption.selected = true;
+
+    const outgoingFromOption = document.querySelector(`#outgoing-from-${settings.outgoingTranslateFrom || 'auto'}`);
+    if (outgoingFromOption) outgoingFromOption.selected = true;
+
+    const outgoingToOption = document.querySelector(`#outgoing-to-${settings.outgoingTranslateTo || 'en'}`);
+    if (outgoingToOption) outgoingToOption.selected = true;
 
     translateLabel.value = settings.translateLabel || '';
     translateRegex.value = settings.translateRegex || '';
@@ -64,6 +75,20 @@ function init() {
     await setSettings({ translateTo: e.target.value });
     showToast('Target language updated');
   });
+
+  if (outgoingTranslateFrom) {
+    outgoingTranslateFrom.addEventListener('change', async (e) => {
+      await setSettings({ outgoingTranslateFrom: e.target.value });
+      showToast('Outgoing source language updated');
+    });
+  }
+
+  if (outgoingTranslateTo) {
+    outgoingTranslateTo.addEventListener('change', async (e) => {
+      await setSettings({ outgoingTranslateTo: e.target.value });
+      showToast('Outgoing target language updated');
+    });
+  }
 
   translateLabel.addEventListener('blur', async (e) => {
     await setSettings({ translateLabel: e.target.value.trim() });

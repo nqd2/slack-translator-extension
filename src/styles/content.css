@@ -251,3 +251,435 @@
   text-decoration: underline;
   color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.75);
 }
+
+/* ==========================================================================
+   Composer Translator (Sticky Formatting Bar Integration)
+   ========================================================================== */
+
+/* Translator Group in Slack Formatting Bar */
+.___sgt-composer-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Native Slack Separator Fallback */
+.___sgt-composer-group .p-composer__separator {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.15);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Translate Button (Icon Only in Formatting Bar) */
+.___sgt-composer-translate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--sk_highlight_accent, #1264a3);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.___sgt-composer-translate-btn:hover {
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.08);
+}
+
+.___sgt-composer-translate-btn:active {
+  transform: scale(0.95);
+}
+
+.___sgt-composer-translate-btn.___sgt-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.___sgt-composer-translate-btn.___sgt-loading .___sgt-composer-icon {
+  animation: ___sgtSpin 1s linear infinite;
+}
+
+.___sgt-composer-translate-btn.___sgt-btn-error {
+  color: #e01e5a !important;
+}
+
+/* Shake Animation on Empty */
+.___sgt-shake {
+  animation: ___sgtShake 0.35s ease-in-out;
+}
+
+@keyframes ___sgtShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-3px); }
+  40%, 80% { transform: translateX(3px); }
+}
+
+/* Language Trigger Badge */
+.___sgt-composer-lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(var(--sk_primary_foreground, 29, 28, 29), 0.18);
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.04);
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.85);
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.___sgt-composer-lang-trigger:hover,
+.___sgt-composer-lang-trigger.___sgt-active {
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.12);
+  border-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.35);
+}
+
+.___sgt-composer-lang-trigger .___sgt-composer-chevron {
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.___sgt-composer-lang-trigger.___sgt-active .___sgt-composer-chevron {
+  transform: rotate(180deg);
+}
+
+/* Swap Button */
+.___sgt-lang-swap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.6);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.___sgt-lang-swap-btn:hover {
+  color: var(--sk_highlight_accent, #1264a3);
+  background-color: rgba(var(--sk_primary_foreground, 29, 28, 29), 0.08);
+}
+
+.___sgt-lang-swap-btn:active .___sgt-swap-icon {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+/* Auto item highlight */
+.___sgt-auto-item {
+  color: var(--sk_highlight_accent, #36c5f0) !important;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  margin-bottom: 2px;
+}
+
+/* ==========================================================================
+   Portal Language Dropdown Menu (Fixed in Body, Screen-Edge Aligned)
+   ========================================================================== */
+.___sgt-portal-menu {
+  position: fixed;
+  z-index: 2147483647;
+  width: 240px;
+  height: 320px;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  background-color: #222529 !important;
+  opacity: 1 !important;
+  color: #d1d2d3 !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  animation: ___sgtPortalIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@keyframes ___sgtPortalIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Light mode fallback */
+@media (prefers-color-scheme: light) {
+  .___sgt-portal-menu {
+    background-color: #ffffff !important;
+    color: #1d1c1d !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* Fixed Search Header */
+.___sgt-portal-search-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #222529 !important;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: light) {
+  .___sgt-portal-search-box {
+    background-color: #ffffff !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.___sgt-portal-search-box .___sgt-search-icon {
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.___sgt-portal-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 12.5px;
+  line-height: 18px;
+  padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  .___sgt-portal-search-input {
+    color: #1d1c1d !important;
+  }
+}
+
+.___sgt-portal-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Scrollable List Container with Slim Custom Scrollbar */
+.___sgt-portal-scroll-list {
+  flex: 1 1 0%;
+  min-height: 0 !important;
+  height: calc(100% - 38px);
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  padding: 4px 0;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  background-color: #222529 !important;
+}
+
+@media (prefers-color-scheme: light) {
+  .___sgt-portal-scroll-list {
+    background-color: #ffffff !important;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  }
+}
+
+.___sgt-portal-scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.___sgt-portal-scroll-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.___sgt-portal-scroll-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.___sgt-portal-scroll-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Section Header */
+.___sgt-lang-section {
+  padding: 2px 0;
+}
+
+.___sgt-lang-header {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 6px 12px 2px 12px;
+}
+
+/* Language Item Button */
+.___sgt-lang-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.12s ease;
+}
+
+@media (prefers-color-scheme: light) {
+  .___sgt-lang-item {
+    color: #1d1c1d;
+  }
+}
+
+.___sgt-lang-item:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #36c5f0 !important;
+}
+
+.___sgt-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.___sgt-item-code {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Undo Toast (Floating Notification in Composer)
+   ========================================================================== */
+.___sgt-undo-toast {
+  position: absolute;
+  bottom: 40px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(29, 28, 29, 0.94);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  z-index: 100000;
+  font-size: 12px;
+  animation: ___sgtToastIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes ___sgtToastIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.___sgt-toast-fadeout {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.2s ease;
+}
+
+.___sgt-undo-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.___sgt-undo-check {
+  color: #2eb67d;
+  flex-shrink: 0;
+}
+
+.___sgt-undo-msg {
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.___sgt-undo-msg b {
+  color: #ffffff;
+}
+
+.___sgt-undo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--sk_highlight_accent, #1264a3);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.___sgt-undo-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-0.5px);
+}
+
+.___sgt-undo-btn:active {
+  transform: translateY(0);
+}
+
+.___sgt-undo-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  margin-left: -2px;
+  transition: color 0.12s ease;
+}
+
+.___sgt-undo-close-btn:hover {
+  color: #ffffff;
+}
+
